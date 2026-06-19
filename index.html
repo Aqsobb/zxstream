@@ -3,346 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQSO STREAM - Live Engine Portal</title>
+    <title>AQSO STREAM - Donghua Portal</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #040712; color: #f1f5f9; overflow-x: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #040712; color: #f1f5f9; }
         .premium-glass { background: rgba(11, 17, 34, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.02); }
-        .card-shadow { box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5); }
     </style>
 </head>
 <body class="bg-[#040712]">
 
-    <!-- APP NAVIGATION Bar -->
+    <!-- NAVBAR USER -->
     <nav class="premium-glass sticky top-0 z-50 px-4 py-3 border-b border-slate-900/50 flex justify-between items-center shadow-md">
         <div class="flex items-center gap-3" onclick="window.location.reload()" style="cursor: pointer;">
-            <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center">
                 <i class="fa-solid fa-play text-white text-xs"></i>
             </div>
             <div class="flex flex-col">
                 <span class="text-sm font-extrabold tracking-tight text-white">AQSO STREAM</span>
                 <div class="flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span id="engineStatusBadge" class="text-[9px] font-medium text-slate-400 tracking-wider">Mengecek Engine...</span>
+                    <span id="dotIndicator" class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span id="engineStatusIndicator" class="text-[9px] font-medium text-slate-400">Sinkronisasi Aktif</span>
                 </div>
             </div>
         </div>
-        
-        <!-- CONTROL BUTTONS -->
-        <div class="flex items-center gap-2">
-            <button onclick="toggleControlPanel()" class="p-2 bg-slate-900 border border-slate-800 text-slate-400 rounded-xl text-xs"><i class="fa-solid fa-gear"></i></button>
-            <button onclick="toggleAuthModal()" class="bg-slate-900 border border-slate-800 text-slate-200 text-[11px] font-semibold px-3 py-2 rounded-xl flex items-center gap-2">
-                <i class="fa-regular fa-user text-xs"></i> <span id="profileBtnText">Masuk</span>
-            </button>
+        <div>
+            <button onclick="alert('Login Demo')" class="bg-slate-900 border border-slate-800 text-slate-200 text-[11px] font-semibold px-3 py-2 rounded-xl">Masuk</button>
         </div>
     </nav>
 
-    <!-- SECRET SCRAPER CONTROL PANEL (Hanya Terlihat Jika Klik Gear) -->
-    <div id="controlPanel" class="hidden max-w-md mx-auto p-4 mt-2">
-        <div class="premium-glass p-4 rounded-2xl border border-indigo-500/30 card-shadow space-y-3">
-            <div class="flex justify-between items-center border-b border-slate-900 pb-2">
-                <h4 class="text-xs font-bold text-indigo-400"><i class="fa-solid fa-terminal mr-1"></i> AQSO MASTER CONTROL</h4>
-                <span class="text-[9px] bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded font-mono">V6 Core</span>
-            </div>
-            <div>
-                <label class="text-[10px] text-slate-400 font-bold block mb-1">TARGET AUTOMATION LINK / KEYWORD:</label>
-                <input id="panelTargetUrl" type="text" class="w-full bg-[#040712] border border-slate-800 rounded-xl p-2.5 text-xs font-mono text-white outline-none focus:border-indigo-500">
-            </div>
-            <div class="flex justify-between items-center pt-1">
-                <div class="flex flex-col">
-                    <span class="text-xs font-bold">Auto Real-Time Scraper</span>
-                    <span class="text-[9px] text-slate-500">Loop refresh background aktif terus</span>
-                </div>
-                <label class="relative inline-flex items-center class cursor-pointer">
-                    <input id="panelAutoScrapeSwitch" type="checkbox" class="sr-only peer">
-                    <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-400 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600 peer-checked:after:bg-white"></div>
-                </label>
-            </div>
-            <button onclick="saveMasterControlConfig()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-2 rounded-xl text-xs font-bold text-white transition-all">Simpan & Terapkan Global</button>
-        </div>
-    </div>
-
-    <!-- MAIN VIEWPORT -->
+    <!-- KONTEN UTAMA -->
     <main class="max-w-md mx-auto p-4 pb-24">
-        <!-- SEARCH BAR -->
-        <div class="mb-5">
-            <div class="relative flex items-center">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 text-slate-400 text-sm"></i>
-                <input id="searchQuery" type="text" placeholder="Cari judul donghua kesukaanmu..." 
-                       class="w-full bg-[#0a0f24] border border-slate-850 focus:border-indigo-500 rounded-xl pl-11 pr-20 py-3.5 text-xs font-semibold text-white placeholder-slate-500 outline-none transition-all">
-                <button onclick="executeSearchAction()" class="absolute right-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-4 py-2 rounded-lg">Cari</button>
-            </div>
+        <div class="mb-5 relative flex items-center">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 text-slate-400 text-sm"></i>
+            <input id="searchQuery" type="text" placeholder="Cari donghua kesukaanmu..." class="w-full bg-[#0a0f24] border border-slate-850 rounded-xl pl-11 pr-20 py-3.5 text-xs text-white outline-none">
+            <button onclick="executeSearchAction()" class="absolute right-2 bg-indigo-600 px-4 py-2 rounded-lg text-xs font-bold text-white">Cari</button>
         </div>
 
-        <!-- LOAD INDICATION -->
         <div id="loadingState" class="text-center py-24">
             <div class="w-9 h-9 rounded-full border-4 border-indigo-500/10 border-t-indigo-500 animate-spin inline-block mb-3"></div>
-            <p id="loadingStateText" class="text-xs font-semibold text-slate-400">Menghubungkan ke API Node...</p>
+            <p class="text-xs font-semibold text-slate-400">Menghubungkan ke API Cluster...</p>
         </div>
 
-        <!-- DYNAMIC PORT -->
         <div id="dynamicViewport" class="hidden space-y-6">
             <div>
                 <h3 id="feedSectionTitle" class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-bolt text-amber-500 text-xs"></i> Sinkronisasi Konten Aktif
+                    <i class="fa-solid fa-bolt text-amber-500"></i> <span id="titleText">Rilis Donghua Terkini</span>
                 </h3>
                 <div id="contentFeedGrid" class="grid grid-cols-2 gap-3"></div>
             </div>
         </div>
     </main>
 
-    <!-- AUTH DIALOG -->
-    <div id="authModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-        <div class="premium-glass w-full max-w-xs p-5 rounded-2xl border border-slate-800 text-center relative card-shadow">
-            <button onclick="toggleAuthModal()" class="absolute top-3 right-4 text-slate-400 text-sm"><i class="fa-solid fa-xmark"></i></button>
-            <i class="fa-solid fa-user-circle text-3xl text-indigo-400 mb-2"></i>
-            <h3 class="text-sm font-bold mb-1">Masuk ke AQSO STREAM</h3>
-            <div class="space-y-2 my-4">
-                <input id="authEmail" type="email" placeholder="Email" class="w-full bg-[#040712] border border-slate-800 rounded-xl p-3 text-xs text-white outline-none">
-                <input id="authPass" type="password" placeholder="Password" class="w-full bg-[#040712] border border-slate-800 rounded-xl p-3 text-xs text-white outline-none">
-            </div>
-            <button onclick="executeMockLogin()" class="w-full bg-indigo-600 py-2.5 rounded-xl text-xs font-bold text-white">Masuk</button>
-        </div>
-    </div>
-
-    <!-- OWNER FOOTER -->
-    <footer class="w-full text-center py-4 border-t border-slate-950 bg-[#02040a] fixed bottom-0 left-0 z-40">
-        <p class="text-[10px] font-medium text-slate-500 tracking-wide">© 2026 Powered by <span class="text-slate-400 font-bold">AQSO</span>. All Rights Reserved.</p>
-    </footer>
-
-    <!-- ==================== FRONTEND CONTROLLER CORE ==================== -->
+    <!-- ========================================================== -->
+    <!-- 🔥 SEKTOR PENGATURAN DOMAIN & AUTO-SCRAPE (UBAH DI SINI) 🔥 -->
+    <!-- ========================================================== -->
     <script>
-        const BASE_HOST = "https://anggasi-aip.hf.space";
-        const API_CONFIG_URL = `${BASE_HOST}/api/v1/config`;
-        const API_SCRAPE_URL = `${BASE_HOST}/api/v1/scrape?query=`;
+        // 1. LINK BACKEND HUGGING FACE LU
+        const BACKEND_API = "https://anggasi-aip.hf.space/api/v1/scrape?query=";
 
-        let loopIntervalWorker = null;
-        let isCurrentlyInPlayerMode = false; // Biar kalau user lagi asyik nonton, interval gak nge-refresh halaman player!
+        // 2. DOMAIN / KEYWORD TARGET YANG MAU DI-SCRAPE OTOMATIS
+        const TARGET_SCRAPE = "https://anichin.moe/"; 
+
+        // 3. PENGATURAN AUTO-REFRESH SINKRONISASI 
+        const AUTO_REFRESH_ACTIVE = true; // Ganti 'false' jika mau dimatikan
+        const REFRESH_INTERVAL_MS = 30000; // Auto-update tiap 30 detik
+    </script>
+    <!-- ========================================================== -->
+
+    <!-- ENGINE LOGIC -->
+    <script>
+        let bgWorker = null;
+        let isWatching = false;
 
         document.addEventListener("DOMContentLoaded", () => {
-            initializeLiveEnginePipeline();
+            initSystem();
         });
 
-        function toggleControlPanel() {
-            document.getElementById('controlPanel').classList.toggle('hidden');
-        }
+        function initSystem() {
+            // Load Beranda Pertama Kali
+            fetchData(TARGET_SCRAPE);
 
-        // AMBIL CONFIG DARI BACKEND SAAT WEB DI-LOAD USER NYATA
-        async function initializeLiveEnginePipeline() {
-            try {
-                const response = await fetch(API_CONFIG_URL);
-                const config = await response.json();
+            // Logika Auto Refresh sesuai Settingan di atas
+            if(AUTO_REFRESH_ACTIVE) {
+                document.getElementById('engineStatusIndicator').innerText = "Live Sync Aktif";
+                document.getElementById('dotIndicator').className = "w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse";
                 
-                // Set isi komponen di Panel Kendali Rahasia
-                document.getElementById('panelTargetUrl').value = config.target_query;
-                document.getElementById('panelAutoScrapeSwitch').checked = config.auto_scrape;
-
-                // Update teks status di Navbar
-                const statusBadge = document.getElementById('engineStatusBadge');
-                if(config.auto_scrape) {
-                    statusBadge.innerText = "Live Auto-Sync Aktif";
-                    statusBadge.className = "text-[9px] font-medium text-emerald-400 tracking-wider";
-                    
-                    // Jalankan scrape pertama kali
-                    fetchOmniScraperEngine(config.target_query);
-
-                    # JALANKAN BACKGROUND POLLING LOOP (Ngescrape terus secara real-time)
-                    if (loopIntervalWorker) clearInterval(loopIntervalWorker);
-                    loopIntervalWorker = setInterval(() => {
-                        if (!isCurrentlyInPlayerMode) {
-                            console.log("[AUTOMATION LOOP] Syncing data target...");
-                            fetchOmniScraperEngine(config.target_query, true);
-                        }
-                    }, config.refresh_interval_ms);
-
-                } else {
-                    statusBadge.innerText = "Auto-Sync Dimatikan";
-                    statusBadge.className = "text-[9px] font-medium text-rose-400 tracking-wider";
-                    fetchOmniScraperEngine(config.target_query); // Tetap render sekali pas di-load
-                    if (loopIntervalWorker) clearInterval(loopIntervalWorker);
-                }
-            } catch (err) {
-                console.error(err);
-                document.getElementById('engineStatusBadge').innerText = "API Offline / Sleeping";
+                bgWorker = setInterval(() => {
+                    if(!isWatching) fetchData(TARGET_SCRAPE, true);
+                }, REFRESH_INTERVAL_MS);
+            } else {
+                document.getElementById('engineStatusIndicator').innerText = "Sync Dimatikan";
+                document.getElementById('dotIndicator').className = "w-1.5 h-1.5 rounded-full bg-rose-500";
             }
         }
 
-        // SIMPAN CONFIG BARU KE MEMORI BACKEND SERVER (Berubah Global untuk seluruh dunia!)
-        async function saveMasterControlConfig() {
-            const targetQuery = document.getElementById('panelTargetUrl').value.trim();
-            const autoScrape = document.getElementById('panelAutoScrapeSwitch').checked;
-
-            if(!targetQuery) return alert("Link / Keyword target gaboleh kosong, Cuk!");
-
-            try {
-                const response = await fetch(API_CONFIG_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ target_query: targetQuery, auto_scrape: autoScrape })
-                });
-                const result = await response.json();
-                if(result.status === "SUCCESS") {
-                    alert("Master Configuration Updated Successfully!");
-                    isCurrentlyInPlayerMode = false; // Reset status mode biar ngerender ulang beranda baru
-                    initializeLiveEnginePipeline(); // Jalankan ulang pipa worker dengan config baru
-                }
-            } catch (err) {
-                alert("Gagal merubah konfigurasi master server.");
-            }
-        }
-
-        // PIPA TRANSMISI UTAMA FETCH DATA VIA FASTAPI
-        async function fetchOmniScraperEngine(payload, isBackgroundRefresh = false) {
-            if(!isBackgroundRefresh) {
+        async function fetchData(payload, isSilent = false) {
+            if(!isSilent) {
                 document.getElementById('loadingState').classList.remove('hidden');
                 document.getElementById('dynamicViewport').classList.add('hidden');
             }
-
             try {
-                const response = await fetch(API_SCRAPE_URL + encodeURIComponent(payload));
-                const jsonResult = await response.json();
-
-                if(!isBackgroundRefresh) {
+                const res = await fetch(BACKEND_API + encodeURIComponent(payload));
+                const json = await res.json();
+                
+                if(!isSilent) {
                     document.getElementById('loadingState').classList.add('hidden');
                     document.getElementById('dynamicViewport').classList.remove('hidden');
                 }
-
-                if (jsonResult && jsonResult.status === "SUCCESS") {
-                    renderProfessionalViewport(jsonResult);
-                }
+                if(json.status === "SUCCESS") renderUI(json);
             } catch (err) {
                 console.error(err);
             }
         }
 
         function executeSearchAction() {
-            const query = document.getElementById('searchQuery').value.trim();
-            if (!query) return alert("Ketik judul dulu Cuk!");
-            isCurrentlyInPlayerMode = true; // Kunci sistem loop biar gak nge-overwrite hasil pencarian manual user
-            fetchOmniScraperEngine(query);
+            const q = document.getElementById('searchQuery').value.trim();
+            if(!q) return;
+            isWatching = true; // Stop auto-refresh saat mencari
+            fetchData(q);
         }
 
-        function requestStreamBypass(url) {
-            isCurrentlyInPlayerMode = true; // Kunci system refresh karena sedang memutar video
-            fetchOmniScraperEngine(url);
+        function requestVideo(url) {
+            isWatching = true; // Stop auto-refresh saat nonton
+            fetchData(url);
         }
 
-        // VIEW VIEWPORT INJECTOR COMPILER
-        function renderProfessionalViewport(data) {
+        function renderUI(data) {
             const grid = document.getElementById('contentFeedGrid');
-            const sectionTitle = document.getElementById('feedSectionTitle');
+            const titleElement = document.getElementById('titleText');
 
             if (data.mode === "STREAM_PLAYER") {
-                sectionTitle.innerHTML = `<i class="fa-solid fa-circle-play text-indigo-500 mr-1.5"></i> Pemutar Video`;
-                const initialUrl = data.stream_nodes.length > 0 ? data.stream_nodes[0].url : "#";
+                titleElement.innerText = "Pemutar Video";
+                const startUrl = data.stream_nodes.length > 0 ? data.stream_nodes[0].url : "";
                 
-                let watchLayoutHtml = `
+                let html = `
                     <div class="col-span-2 space-y-4">
-                        <div class="w-full aspect-video rounded-2xl overflow-hidden bg-black relative shadow-lg">
-                            <iframe id="mainVideoPlayerFrame" src="${initialUrl}" class="w-full h-full border-0 absolute inset-0" allowfullscreen="true" scrolling="no"></iframe>
+                        <div class="w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-lg">
+                            <iframe id="mainPlayer" src="${startUrl}" class="w-full h-full border-0" allowfullscreen></iframe>
                         </div>
-                        <div class="premium-glass p-4 rounded-xl">
-                            <h2 class="text-sm font-bold text-white leading-tight">${data.meta.title}</h2>
-                            <p class="text-[10px] text-slate-500 mt-1">Live Automation Player Powered by AQSO</p>
-                        </div>
-                        <div class="premium-glass rounded-xl overflow-hidden">
-                            <div class="flex border-b border-slate-900 text-center text-xs font-bold">
-                                <div onclick="switchPlayerTab('servers')" id="tabBtn-servers" class="flex-1 py-3 text-indigo-400 border-b-2 border-indigo-500 bg-slate-900/20 cursor-pointer">SERVER LIST</div>
-                                <div onclick="switchPlayerTab('episodes')" id="tabBtn-episodes" class="flex-1 py-3 text-slate-400 cursor-pointer">EPISODES</div>
-                            </div>
-                            <div id="panel-servers" class="p-3 space-y-2">
+                        <div class="premium-glass p-4 rounded-xl"><h2 class="text-sm font-bold text-white">${data.meta.title}</h2></div>
+                        <div class="premium-glass rounded-xl overflow-hidden p-3 space-y-2">
+                            <h4 class="text-xs font-bold text-indigo-400 mb-3 border-b border-slate-800 pb-2">PILIH SERVER</h4>
                 `;
 
-                if (data.stream_nodes.length > 0) {
-                    data.stream_nodes.forEach((node, i) => {
-                        watchLayoutHtml += `
-                            <div onclick="switchVideoServerSource('${node.url}', ${i})" id="serverNodeCard-${i}" class="p-3 rounded-xl border ${i === 0 ? 'border-indigo-500/50 bg-indigo-500/5' : 'border-slate-850 bg-[#0b1329]'} flex justify-between items-center text-xs cursor-pointer transition-all">
-                                <div class="flex items-center gap-2"><i class="fa-solid fa-server text-indigo-400 text-[11px]"></i><span class="font-semibold text-slate-200">Server Link Alternatif ${i + 1}</span></div>
-                                <span class="text-[10px] font-bold text-slate-400">HD Player</span>
-                            </div>
-                        `;
-                    });
-                } else {
-                    watchLayoutHtml += `<p class="text-xs text-red-400 p-2 italic text-center">Video terproteksi parah atau link m3u8 mati.</p>`;
-                }
+                data.stream_nodes.forEach((n, i) => {
+                    html += `<div onclick="document.getElementById('mainPlayer').src='${n.url}'" class="p-3 bg-[#0b1329] border border-slate-850 rounded-xl flex justify-between cursor-pointer text-xs"><span class="font-bold text-slate-200">${n.type} ${i+1}</span></div>`;
+                });
 
-                watchLayoutHtml += `</div><div id="panel-episodes" class="p-3 hidden grid grid-cols-2 gap-2">`;
-
-                if (data.episode_map.length > 0) {
-                    data.episode_map.forEach(ep => {
-                        watchLayoutHtml += `
-                            <button onclick="requestStreamBypass('${ep.link}')" class="bg-[#0b1329] border border-slate-850 p-2.5 rounded-xl text-left text-xs text-slate-300 transition-all truncate">
-                                <i class="fa-solid fa-circle-play text-[10px] text-indigo-400 mr-1.5"></i> ${ep.episode_node}
-                            </button>
-                        `;
-                    });
-                } else {
-                    watchLayoutHtml += `<p class="text-xs text-slate-500 col-span-2 p-2 italic text-center">Tidak ada episode tambahan.</p>`;
-                }
-
-                watchLayoutHtml += `</div></div></div>`;
-                grid.className = "grid grid-cols-1";
-                grid.innerHTML = watchLayoutHtml;
-
-            } else if (data.mode === "SEARCH_GRID") {
-                if(data.meta.keyword_query && !data.meta.keyword_query.includes("https://")) {
-                    sectionTitle.innerHTML = `<i class="fa-solid fa-magnifying-glass text-indigo-400 mr-1.5"></i> Hasil Pencarian: "${data.meta.keyword_query}"`;
-                } else {
-                    sectionTitle.innerHTML = `<i class="fa-solid fa-star text-amber-500 text-xs mr-1.5"></i> Rilis Donghua Terkini (Auto Real-time)`;
-                }
+                html += `</div><div class="premium-glass rounded-xl overflow-hidden p-3 grid grid-cols-2 gap-2"><h4 class="col-span-2 text-xs font-bold text-indigo-400 mb-2 border-b border-slate-800 pb-2">DAFTAR EPISODE</h4>`;
                 
-                let gridHtml = "";
-                if (data.grid_data && data.grid_data.length > 0) {
-                    data.grid_data.forEach(item => {
-                        gridHtml += `
-                            <div class="premium-glass rounded-2xl overflow-hidden border border-slate-900 flex flex-col justify-end min-h-[220px] p-3 relative group shadow-md">
-                                <img src="${item.image_poster}" class="w-full h-full object-cover absolute inset-0 z-0 group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=400';">
-                                <div class="absolute inset-0 bg-gradient-to-t from-[#040712] via-[#040712]/30 to-transparent z-10"></div>
-                                <span class="absolute top-2 left-2 bg-indigo-600 text-[9px] font-extrabold px-1.5 py-0.5 rounded z-20 text-white shadow">${item.badge_episode}</span>
-                                <div class="relative z-20">
-                                    <h4 class="text-xs font-bold text-white leading-tight mb-2.5 line-clamp-2">${item.title}</h4>
-                                    <button onclick="requestStreamBypass('${item.url_target}')" class="w-full text-center bg-indigo-600 hover:bg-indigo-500 py-2 rounded-xl text-[10px] font-bold text-white shadow-md">Tonton Sekarang</button>
-                                </div>
-                            </div>
-                        `;
-                    });
-                } else {
-                    gridHtml = `<div class="col-span-2 text-center py-14 text-xs text-slate-500 italic">Konten tidak ditemukan.</div>`;
-                }
-                grid.className = "grid grid-cols-2 gap-3";
-                grid.innerHTML = gridHtml;
-            }
-        }
+                data.episode_map.forEach(ep => {
+                    html += `<button onclick="requestVideo('${ep.link}')" class="bg-[#0b1329] border border-slate-850 p-2.5 rounded-xl text-left text-xs truncate"><i class="fa-solid fa-play text-[9px] text-indigo-400 mr-1"></i> ${ep.episode_node}</button>`;
+                });
+                grid.className = "grid grid-cols-1";
+                grid.innerHTML = html + "</div></div>";
 
-        function switchVideoServerSource(serverUrl, index) {
-            document.getElementById('mainVideoPlayerFrame').src = serverUrl;
-        }
-
-        function switchPlayerTab(tabName) {
-            const serversBtn = document.getElementById('tabBtn-servers');
-            const episodesBtn = document.getElementById('tabBtn-episodes');
-            const serversPanel = document.getElementById('panel-servers');
-            const episodesPanel = document.getElementById('panel-episodes');
-
-            if (tabName === 'servers') {
-                serversBtn.className = "flex-1 py-3 text-indigo-400 border-b-2 border-indigo-500 bg-slate-900/20 cursor-pointer";
-                episodesBtn.className = "flex-1 py-3 text-slate-400 cursor-pointer";
-                serversPanel.classList.remove('hidden');
-                episodesPanel.classList.add('hidden');
             } else {
-                episodesBtn.className = "flex-1 py-3 text-indigo-400 border-b-2 border-indigo-500 bg-slate-900/20 cursor-pointer";
-                serversBtn.className = "flex-1 py-3 text-slate-400 cursor-pointer";
-                episodesPanel.classList.remove('hidden');
-                serversPanel.classList.add('hidden');
+                titleElement.innerText = data.meta.keyword_query.includes('http') ? "Rilis Donghua Terkini" : `Hasil: "${data.meta.keyword_query}"`;
+                let html = "";
+                data.grid_data.forEach(item => {
+                    html += `
+                        <div class="premium-glass rounded-2xl overflow-hidden border border-slate-900 flex flex-col justify-end min-h-[220px] p-3 relative group">
+                            <img src="${item.image_poster}" class="w-full h-full object-cover absolute inset-0 z-0">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#040712] via-[#040712]/30 to-transparent z-10"></div>
+                            <span class="absolute top-2 left-2 bg-indigo-600 text-[9px] font-extrabold px-1.5 py-0.5 rounded z-20 text-white">${item.badge_episode}</span>
+                            <div class="relative z-20">
+                                <h4 class="text-xs font-bold text-white mb-2.5 line-clamp-2">${item.title}</h4>
+                                <button onclick="requestVideo('${item.url_target}')" class="w-full bg-indigo-600 py-2 rounded-xl text-[10px] font-bold text-white">Tonton</button>
+                            </div>
+                        </div>`;
+                });
+                grid.className = "grid grid-cols-2 gap-3";
+                grid.innerHTML = html;
             }
         }
-
-        function toggleAuthModal() { document.getElementById('authModal').classList.toggle('hidden'); }
-        function executeMockLogin() { toggleAuthModal(); alert("Login Demo Berhasil!"); }
     </script>
 </body>
 </html>
